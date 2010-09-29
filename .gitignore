@@ -1,0 +1,7 @@
+.DS_Store
+src/CMakeCache.txt
+src/CMakeFiles/**
+src/Makefile
+src/arss
+src/arss-fork
+src/cmake_install.cmake
