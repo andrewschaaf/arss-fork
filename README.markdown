@@ -5,6 +5,10 @@ The [ARSS project page](http://arss.sourceforge.net/) says "ARSS is now supersed
 
 This repo is a fork of ARSS 0.2.3.
 
+## Building
+
+<pre>cd src; cmake . &amp;&amp; make</pre>
+
 ## Examples
 
 ### (mono WAV) &rarr; (spectrogram as raw 32-bit float matrix columns)
