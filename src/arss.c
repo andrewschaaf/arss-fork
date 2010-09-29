@@ -519,7 +519,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (in_name!=NULL)			// if in_name has already been filled in
+	if (strcmp(in_name, "STDIN") == 0)
+	{
+		fin = stdin;
+		fprintf(stderr, "Input file : STDIN\n");
+	}
+	else if (in_name!=NULL)            // if in_name has already been filled in
 	{
 		fin=fopen(in_name, "rb");	// try to open it
 
@@ -556,7 +561,12 @@ int main(int argc, char *argv[])
 		while (fin==NULL);
 	}
 
-	if (out_name!=NULL)			// if out_name has already been filled in
+	if (strcmp(out_name, "STDOUT") == 0)
+	{
+		fout = stdout;
+		fprintf(stderr, "Output file : STDOUT\n");
+	}
+	else if (out_name!=NULL)			// if out_name has already been filled in
 	{
 		fout=fopen(out_name, "wb");
 
