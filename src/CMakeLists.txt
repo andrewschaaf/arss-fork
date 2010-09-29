@@ -1,5 +1,5 @@
-project (arss C)
-add_executable (arss arss.c dsp.c util.c image_io.c sound_io.c)
+project (arss-fork C)
+add_executable (arss-fork arss.c dsp.c util.c image_io.c sound_io.c)
 
 
 SET (CMAKE_BUILD_TYPE Release)
@@ -33,6 +33,6 @@ ELSE (HAVE_FFTW3)
 	ENDIF (FFTW3_FIND_REQUIRED)
 ENDIF (HAVE_FFTW3)
 
-TARGET_LINK_LIBRARIES (arss fftw3 m)
+TARGET_LINK_LIBRARIES (arss-fork fftw3 m)
 
-INSTALL(PROGRAMS arss DESTINATION bin)
+INSTALL(PROGRAMS arss-fork DESTINATION bin)
