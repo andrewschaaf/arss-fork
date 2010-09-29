@@ -6,7 +6,7 @@ void in_8(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels)
 	uint8_t byte;
 
 	#ifdef DEBUG
-	printf("in_8...\n");
+	fprintf(stderr, "in_8...\n");
 	#endif
 
 	for (i=0; i<samplecount; i++)
@@ -24,7 +24,7 @@ void out_8(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels)
 	uint8_t byte;
 
 	#ifdef DEBUG
-	printf("out_8...\n");
+	fprintf(stderr, "out_8...\n");
 	#endif
 
 	for (i=0; i<samplecount; i++)
@@ -47,7 +47,7 @@ void in_16(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels)
 	int32_t i, ic;
 
 	#ifdef DEBUG
-	printf("in_16...\n");
+	fprintf(stderr, "in_16...\n");
 	#endif
 
 	for (i=0; i<samplecount; i++)
@@ -61,7 +61,7 @@ void out_16(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels
 	double val;
 
 	#ifdef DEBUG
-	printf("out_16...\n");
+	fprintf(stderr, "out_16...\n");
 	#endif
 
 	for (i=0; i<samplecount; i++)
@@ -83,7 +83,7 @@ void in_32(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels)
 	float val;
 
 	#ifdef DEBUG
-	printf("in_32...\n");
+	fprintf(stderr, "in_32...\n");
 	#endif
 
 	for (i=0;i<samplecount;i++)
@@ -100,7 +100,7 @@ void out_32(FILE *wavfile, double **sound, int32_t samplecount, int32_t channels
 	float val;
 
 	#ifdef DEBUG
-	printf("out_32...\n");
+	fprintf(stderr, "out_32...\n");
 	#endif
 
 	for (i=0; i<samplecount; i++)
@@ -118,7 +118,7 @@ double **wav_in(FILE *wavfile, int32_t *channels, int32_t *samplecount, int32_t 
 	int32_t tag[13];
 
 	#ifdef DEBUG
-	printf("wav_in...\n");
+	fprintf(stderr, "wav_in...\n");
 	#endif
 
 	for (i=0; i<13; i++)					// tag reading
@@ -177,7 +177,7 @@ void wav_out(FILE *wavfile, double **sound, int32_t channels, int32_t samplecoun
 	int32_t tag[] = {1179011410, 0, 1163280727, 544501094, 16, 1, 1, 0, 0, 0, 0, 1635017060, 0, 0};
 
 	#ifdef DEBUG
-	printf("wav_out...\n");
+	fprintf(stderr, "wav_out...\n");
 	#endif
 
 	//********WAV tags generation********
@@ -218,7 +218,7 @@ int32_t wav_out_param()
 
 	do
 	{
-		printf("Bits per sample (8/16/32) [16] : ");
+		fprintf(stderr, "Bits per sample (8/16/32) [16] : ");
 		bps=getfloat();
 		if (bps==0 || bps<-2147483647)	// The -2147483647 check is used for the sake of compatibility with C90
 			bps = 16;

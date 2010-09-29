@@ -52,7 +52,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 	char conf_path[FILENAME_MAX];	// Path to the configuration file (only used on non-Windows platforms)
 
 	#ifdef DEBUG
-	printf("settingsinput...\n");
+	fprintf(stderr, "settingsinput...\n");
 	#endif
 
 	#ifdef WIN32
@@ -71,7 +71,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 		}
 		//********Output settings querying********
 	
-		printf("Sample rate [44100] : ");			// Query for a samplerate
+		fprintf(stderr, "Sample rate [44100] : ");			// Query for a samplerate
 		*samplerate=getfloat();
 		if (*samplerate==0 || *samplerate<-2147483647)		// The -2147483647 check is used for the sake of compatibility with C90
 			*samplerate = 44100;				// Default value
@@ -136,7 +136,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 			fprintf(stderr, "Please define a minimum frequency.\nUse --min-freq (-min).\nExiting with error.\n");
 			exit(EXIT_FAILURE);
 		}
-		printf("Min. frequency (Hz) [%.3f]: ", *basefreq);
+		fprintf(stderr, "Min. frequency (Hz) [%.3f]: ", *basefreq);
 		gf=getfloat();
 		if (gf != 0)
 			*basefreq=gf;
@@ -152,7 +152,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 			fprintf(stderr, "Please define a bands per octave setting.\nUse --bpo (-b).\nExiting with error.\n");
 			exit(EXIT_FAILURE);
 		}
-		printf("Bands per octave [%.3f]: ", *bandsperoctave);
+		fprintf(stderr, "Bands per octave [%.3f]: ", *bandsperoctave);
 		gf=getfloat();
 		if (gf != 0)
 			*bandsperoctave=gf;
@@ -186,7 +186,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 				fprintf(stderr, "Please define a maximum frequency.\nUse --max-freq (-max).\nExiting with error.\n");
 				exit(EXIT_FAILURE);
 			}
-			printf("Max. frequency (Hz) (up to %.3f) [%.3f]: ", ma, maxfreq);
+			fprintf(stderr, "Max. frequency (Hz) (up to %.3f) [%.3f]: ", ma, maxfreq);
 			gf=getfloat();
 			if (gf != 0)
 				maxfreq=gf;
@@ -205,20 +205,20 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 	if (set_min==0)
 	{
 		*basefreq = pow(LOGBASE, (*bands-1) / *bandsperoctave) * maxfreq;		// calculate the lower frequency in Hz
-		printf("Min. frequency : %.3f Hz\n", *basefreq);
+		fprintf(stderr, "Min. frequency : %.3f Hz\n", *basefreq);
 		*basefreq /= *samplerate;
 	}
 
 	if (set_max==0)
 	{
 		maxfreq = pow(LOGBASE, (*bands-1) / *bandsperoctave) * (*basefreq * *samplerate);	// calculate the upper frequency in Hz
-		printf("Max. frequency : %.3f Hz\n", maxfreq);
+		fprintf(stderr, "Max. frequency : %.3f Hz\n", maxfreq);
 	}
 
 	if (set_y==0)
 	{
 		*bands = 1 + roundoff(*bandsperoctave * (log_b(maxfreq) - log_b(*basefreq * *samplerate)));
-		printf("Bands : %d\n", *bands);
+		fprintf(stderr, "Bands : %d\n", *bands);
 	}
 
 	if (set_bpo==0)
@@ -227,13 +227,13 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 			*bandsperoctave = maxfreq / *samplerate;
 		else
 			*bandsperoctave = (*bands-1) / (log_b(maxfreq) - log_b(*basefreq * *samplerate));
-		printf("Bands per octave : %.3f\n", *bandsperoctave);
+		fprintf(stderr, "Bands per octave : %.3f\n", *bandsperoctave);
 	}
 
 	if (set_x==1 && mode==0)	// If we're in Analysis mode and that X is set (by the user)
 	{
 		*pixpersec = (double) Xsize * (double) *samplerate / (double) samplecount;	// calculate pixpersec
-		printf("Pixels per second : %.3f\n", *pixpersec);
+		fprintf(stderr, "Pixels per second : %.3f\n", *pixpersec);
 	}
 
 	if ((mode==0 && set_x==0 && set_pps==0) || (mode==1 && set_pps==0))	// If in Analysis mode none are set or pixpersec isn't set in Synthesis mode
@@ -243,7 +243,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 			fprintf(stderr, "Please define a pixels per second setting.\nUse --pps (-p).\nExiting with error.\n");
 			exit(EXIT_FAILURE);
 		}
-		printf("Pixels per second [%.3f]: ", *pixpersec);
+		fprintf(stderr, "Pixels per second [%.3f]: ", *pixpersec);
 		gf=getfloat();
 		if (gf != 0)
 			*pixpersec=gf;
@@ -273,7 +273,7 @@ void settingsinput(int32_t *bands, int32_t samplecount, int32_t *samplerate, dou
 
 void print_help()
 {
-	printf(
+	fprintf(stderr, 
 		"Usage: arss [options] input_file output_file [options]. Example:\n"
 		"\n"
 		"arss -q in.bmp out.wav --noise --min-freq 55 -max 16000 --pps 100 -r 44100 -f 16\n"
@@ -299,7 +299,7 @@ void print_help()
 
 void print_adv_help()
 {
-	printf(
+	fprintf(stderr, 
 		"More advanced options :\n"
 		"\n"
 		"--log-base [real]          Frequency scale's logarithmic base (default: 2)\n"
@@ -331,7 +331,7 @@ int main(int argc, char *argv[])
 	quiet=0;
 	#endif
 
-	printf("The Analysis & Resynthesis Sound Spectrograph %s\n", version);
+	fprintf(stderr, "The Analysis & Resynthesis Sound Spectrograph %s\n", version);
 
 	srand(time(NULL));
 
@@ -498,7 +498,7 @@ int main(int argc, char *argv[])
 
 			if (strcmp(argv[i], "--version")==0	|| strcmp(argv[i], "-v")==0)
 			{
-				printf("Copyright (C) 2005-2008 Michel Rouzic\nProgram last modified by its author on %s\n", date);
+				fprintf(stderr, "Copyright (C) 2005-2008 Michel Rouzic\nProgram last modified by its author on %s\n", date);
 				exit(EXIT_SUCCESS);
 			}
 
@@ -528,7 +528,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "The input file %s could not be found\nExiting with error.\n", in_name);
 			exit(EXIT_FAILURE);
 		}
-		printf("Input file : %s\n", in_name);
+		fprintf(stderr, "Input file : %s\n", in_name);
 	}
 	else
 	{
@@ -538,11 +538,11 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-		printf("Type 'help' to read the manual page\n");
+		fprintf(stderr, "Type 'help' to read the manual page\n");
 
 		do
 		{
-			printf("Input file : ");
+			fprintf(stderr, "Input file : ");
 			in_name=getstring();
 
 			if (strcmp(in_name, "help")==0)		// if 'help' has been typed
@@ -565,7 +565,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "The output file %s could not be opened.\nPlease make sure it isn't opened by any other program and press Return.\nExiting with error.\n", out_name);
 			exit(EXIT_FAILURE);
 		}
-		printf("Output file : %s\n", out_name);
+		fprintf(stderr, "Output file : %s\n", out_name);
 	}
 	else
 	{
@@ -574,7 +574,7 @@ int main(int argc, char *argv[])
 			fprintf(stderr, "Please specify an output file.\nExiting with error.\n");
 			exit(EXIT_FAILURE);
 		}
-		printf("Output file : ");
+		fprintf(stderr, "Output file : ");
 		out_name=getstring();
 		fout=fopen(out_name, "wb");
 
@@ -598,7 +598,7 @@ int main(int argc, char *argv[])
 				fprintf(stderr, "Please specify an operation mode.\nUse either --analysis (-a), --sine (-s) or --noise (-n).\nExiting with error.\n");
 				exit(EXIT_FAILURE);
 			}
-			printf("Choose the mode (Press 1, 2 or 3) :\n\t1. Analysis\n\t2. Sine synthesis\n\t3. Noise synthesis\n> ");
+			fprintf(stderr, "Choose the mode (Press 1, 2 or 3) :\n\t1. Analysis\n\t2. Sine synthesis\n\t3. Noise synthesis\n> ");
 			mode=getfloat();
 		}
 		while (mode!=1 && mode!=2 && mode!=3);
@@ -608,7 +608,7 @@ int main(int argc, char *argv[])
 	{
 		sound=wav_in(fin, &channels, &samplecount, &samplerate);					// Sound input
 		#ifdef DEBUG
-		printf("samplecount : %i\nchannels : %i\n", samplecount, channels);
+		fprintf(stderr, "samplecount : %i\nchannels : %i\n", samplecount, channels);
 		#endif
 
 		settingsinput(&Ysize, samplecount, &samplerate, &basefreq, maxfreq, &pixpersec, &bpo, Xsize, 0);	// User settings input
@@ -641,7 +641,7 @@ int main(int argc, char *argv[])
 	}
 
 	clockb=gettime();
-	printf("Processing time : %.3f s\n", (double) (clockb-clocka)/1000.0); 
+	fprintf(stderr, "Processing time : %.3f s\n", (double) (clockb-clocka)/1000.0); 
 
 	win_return();
 

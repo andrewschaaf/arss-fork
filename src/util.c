@@ -5,7 +5,7 @@ void win_return()
 	#ifdef WIN32
 	if (quiet==0)
 	{
-		printf("Press Return to quit\n");
+		fprintf(stderr, "Press Return to quit\n");
 		getchar();
 	}
 	#endif

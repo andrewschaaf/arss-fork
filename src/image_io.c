@@ -7,7 +7,7 @@ double **bmp_in(FILE *bmpfile, int32_t *y, int32_t *x)
 	double	**image;
 	uint8_t	zerobytes, val;
 	#ifdef DEBUG
-	printf("bmp_in...\n");
+	fprintf(stderr, "bmp_in...\n");
 	#endif
 
 	if (fread_le_short(bmpfile) != 19778)		// "BM" format tag check
@@ -68,7 +68,7 @@ void bmp_out(FILE *bmpfile, double **image, int32_t y, int32_t x)
 	double	vald;
 
 	#ifdef DEBUG
-	printf("bmp_out...\n");
+	fprintf(stderr, "bmp_out...\n");
 	#endif
 
 	zerobytes = 4 - ((x*3) & 3);		// computation of zero bytes
@@ -123,6 +123,6 @@ void bmp_out(FILE *bmpfile, double **image, int32_t y, int32_t x)
 	fclose(bmpfile);
 
 	#ifdef DEBUG
-	printf("Image size : %dx%d\n", x, y);
+	fprintf(stderr, "Image size : %dx%d\n", x, y);
 	#endif
 }

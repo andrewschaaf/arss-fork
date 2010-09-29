@@ -29,7 +29,7 @@ void normi(double **s, int32_t xs, int32_t ys, double ratio)	// normalises a sig
 			}
 
 	#ifdef DEBUG
-	printf("norm : %.3f (Y:%i X:%i)\n", max, maxy, maxx);
+	fprintf(stderr, "norm : %.3f (Y:%i X:%i)\n", max, maxy, maxx);
 	#endif
 	
 	if (max!=0.0)
@@ -45,7 +45,7 @@ void normi(double **s, int32_t xs, int32_t ys, double ratio)	// normalises a sig
 			s[iy][ix]*=max;
 
 	#ifdef DEBUG
-	printf("ex : %.3f\n", s[0][0]);
+	fprintf(stderr, "ex : %.3f\n", s[0][0]);
 	#endif
 }
 
@@ -82,7 +82,7 @@ double *freqarray(double basefreq, int32_t bands, double bandsperoctave)
 		freq[i] = log_pos((double) i/(double) (bands-1), basefreq, maxfreq);	//band's central freq
 	}
 	if (log_pos((double) bands / (double) (bands-1), basefreq, maxfreq)>0.5)
-		printf("Warning: Upper frequency limit above Nyquist frequency\n");	// TODO change sampling rate instead
+		fprintf(stderr, "Warning: Upper frequency limit above Nyquist frequency\n");	// TODO change sampling rate instead
 
 	return freq;
 }
@@ -269,7 +269,7 @@ double **anal(double *s, int32_t samplecount, int32_t samplerate, int32_t *Xsize
 	*Xsize = samplecount * pixpersec;
 	if (fmod((double) samplecount * pixpersec, 1.0) != 0.0)		// round-up
 		(*Xsize)++;
-	printf("Image size : %dx%d\n", *Xsize, bands);
+	fprintf(stderr, "Image size : %dx%d\n", *Xsize, bands);
 	out = malloc (bands * sizeof(double *));
 
 	clocka=gettime();
@@ -316,7 +316,7 @@ double **anal(double *s, int32_t samplecount, int32_t samplerate, int32_t *Xsize
 		if (Md<Mc)					// round the larger bands up to the next integer made of 2^n * 3^m
 			Mc = nextsprime(Mc);
 
-		printf("%4d/%d (FFT size: %6d)   %.2f Hz - %.2f Hz\r", ib+1, bands, Mc, (double) Fa*samplerate/Mb, (double) Fd*samplerate/Mb);
+		fprintf(stderr, "%4d/%d (FFT size: %6d)   %.2f Hz - %.2f Hz\r", ib+1, bands, Mc, (double) Fa*samplerate/Mb, (double) Fd*samplerate/Mb);
 
 		out[bands-ib-1] = calloc(Mc, sizeof(double));	// allocate new band
 
@@ -371,7 +371,7 @@ double **anal(double *s, int32_t samplecount, int32_t samplerate, int32_t *Xsize
 		out[bands-ib-1] = realloc(out[bands-ib-1], *Xsize * sizeof(double));		// Tail chopping
 	}
 
-	printf("\n");
+	fprintf(stderr, "\n");
 
 	normi(out, *Xsize, bands, 1.0);
 	return out;
@@ -437,7 +437,7 @@ double *synt_sine(double **d, int32_t Xsize, int32_t bands, int32_t *samplecount
 	sbsize = nextsprime(Xsize * 2);				// In Circular mode keep it to sbsize = Xsize * 2;
 	
 	*samplecount = roundoff(Xsize/pixpersec);
-	printf("Sound duration : %.3f s\n", (double) *samplecount/samplerate);
+	fprintf(stderr, "Sound duration : %.3f s\n", (double) *samplecount/samplerate);
 	*samplecount = roundoff(0.5*sbsize/pixpersec);		// Do not change this value as it would stretch envelopes
 	
 	s = calloc(*samplecount, sizeof(double));		// allocation of the sound signal
@@ -479,7 +479,7 @@ double *synt_sine(double **d, int32_t Xsize, int32_t bands, int32_t *samplecount
 		fft(sband, sband, sbsize, 0);			// FFT of the envelope
 		Fc = roundoff(freq[ib] * *samplecount);	// band's centre index (envelope's DC element)
 
-		printf("%4d/%d   %.2f Hz\r", ib+1, bands, (double) Fc*samplerate / *samplecount);
+		fprintf(stderr, "%4d/%d   %.2f Hz\r", ib+1, bands, (double) Fc*samplerate / *samplecount);
 
 		//********Write FFT********
 
@@ -494,7 +494,7 @@ double *synt_sine(double **d, int32_t Xsize, int32_t bands, int32_t *samplecount
 		//--------Write FFT--------
 	}
 
-	printf("\n");
+	fprintf(stderr, "\n");
 
 	fft(s, s, *samplecount, 1);			// IFFT of the final sound
 	*samplecount = roundoff(Xsize/pixpersec);	// chopping tails by ignoring them
@@ -538,7 +538,7 @@ double *synt_noise(double **d, int32_t Xsize, int32_t bands, int32_t *samplecoun
 	clocka=gettime();
 
 	*samplecount = roundoff(Xsize/pixpersec);		// calculation of the length of the final signal
-	printf("Sound duration : %.3f s\n", (double) *samplecount/samplerate);
+	fprintf(stderr, "Sound duration : %.3f s\n", (double) *samplecount/samplerate);
 
 	s = calloc (*samplecount, sizeof(double));		// allocation of the final signal
 	envelope = calloc (*samplecount, sizeof(double));	// allocation of the interpolated envelope
@@ -577,7 +577,7 @@ double *synt_noise(double **d, int32_t Xsize, int32_t bands, int32_t *samplecoun
 
 	for (ib=0; ib<bands; ib++)
 	{
-		printf("%4d/%d\r", ib+1, bands);
+		fprintf(stderr, "%4d/%d\r", ib+1, bands);
 
 		memset(noise, 0, loop_size * sizeof(double));	// reset filtered noise
 
@@ -594,7 +594,7 @@ double *synt_noise(double **d, int32_t Xsize, int32_t bands, int32_t *samplecoun
 		if (Fa<1)
 			Fa=1;
 
-		printf("%4d/%d   %.2f Hz - %.2f Hz\r", ib+1, bands, (double) Fa*samplerate/loop_size, (double) Fd*samplerate/loop_size);
+		fprintf(stderr, "%4d/%d   %.2f Hz - %.2f Hz\r", ib+1, bands, (double) Fa*samplerate/loop_size, (double) Fd*samplerate/loop_size);
 
 		for (i=Fa; i<Fd; i++)
 		{
@@ -621,7 +621,7 @@ double *synt_noise(double **d, int32_t Xsize, int32_t bands, int32_t *samplecoun
 		}
 	}
 	
-	printf("\n");
+	fprintf(stderr, "\n");
 
 	normi(&s, *samplecount, 1, 1.0);
 
