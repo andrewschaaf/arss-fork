@@ -335,6 +335,7 @@ int main(int argc, char *argv[])
 
 	srand(time(NULL));
 
+	int spectrogram_output_format = FORMAT_BMP;
 	for (i=1; i<argc; i++)
 	{
 		if (strcmp(argv[i], "/?")==0)	// DOS friendly help
@@ -358,6 +359,9 @@ int main(int argc, char *argv[])
 		}
 		else						// if the argument is a parameter
 		{
+			if (strcmp(argv[i], "--float32-columns") == 0)
+				spectrogram_output_format = FORMAT_FLOAT32_COLUMNS;
+
 			if (strcmp(argv[i], "--analysis")==0	|| strcmp(argv[i], "-a")==0)
 				mode=1;
 
@@ -623,9 +627,15 @@ int main(int argc, char *argv[])
 
 		settingsinput(&Ysize, samplecount, &samplerate, &basefreq, maxfreq, &pixpersec, &bpo, Xsize, 0);	// User settings input
 		image = anal(sound[0], samplecount, samplerate, &Xsize, Ysize, bpo, pixpersec, basefreq);	// Analysis
-		if (brightness!=1.0)
+		if (brightness != 1.0) {
 			brightness_control(image, Ysize, Xsize, 1.0/brightness);
-		bmp_out(fout, image, Ysize, Xsize);								// Image output
+		}
+		if (spectrogram_output_format == FORMAT_BMP) {
+			bmp_out(fout, image, Ysize, Xsize);
+		}
+		else if (spectrogram_output_format == FORMAT_FLOAT32_COLUMNS) {
+			float32_columns_out(fout, image, Ysize, Xsize);
+		}
 	}
 	if (mode==2 || mode==3)
 	{

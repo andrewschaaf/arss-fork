@@ -8,6 +8,8 @@
 #include "util.h"
 
 extern double **bmp_in(FILE *bmpfile, int32_t *y, int32_t *x);
+
+extern void float32_columns_out(FILE *fout, double **image, int32_t y, int32_t x);
 extern void bmp_out(FILE *bmpfile, double **image, int32_t y, int32_t x);
 
 #endif

@@ -11,6 +11,11 @@
 
 #include "dsp.h"
 
+
+#define FORMAT_BMP                    1
+#define FORMAT_FLOAT32_COLUMNS        2
+
+
 int32_t quiet;
 
 extern void win_return();

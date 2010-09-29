@@ -42,7 +42,7 @@ double **bmp_in(FILE *bmpfile, int32_t *y, int32_t *x)
 	if (zerobytes==4)
 		zerobytes = 0;
 
-	for (iy=*y-1; iy!=-1; iy--)		// backwards reading
+	for (iy=y-1; iy!=-1; iy--)        // BMP pixels are ordered: ...bottom row (left-to-right)... ... ...top row (left-to-right)...
 	{
 		for (ix=0; ix<*x; ix++)
 		{
@@ -59,6 +59,19 @@ double **bmp_in(FILE *bmpfile, int32_t *y, int32_t *x)
 	fclose(bmpfile);
 	return image;
 }
+
+
+void float32_columns_out(FILE *fout, double **image, int32_t y, int32_t x) {
+	int32_t i, iy, ix;
+	float val;
+	for (ix = 0; ix < x; ix++) {
+		for (iy = 0; iy < y; iy++) {
+			val = image[iy][ix];
+			fwrite(&val, 4, 1, fout);
+		}
+	}
+}
+
 
 void bmp_out(FILE *bmpfile, double **image, int32_t y, int32_t x)
 {
