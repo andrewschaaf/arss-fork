@@ -70,6 +70,7 @@ void float32_columns_out(FILE *fout, double **image, int32_t y, int32_t x) {
 			fwrite(&val, 4, 1, fout);
 		}
 	}
+	fclose(fout);
 }
 
 
