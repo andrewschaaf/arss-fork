@@ -1,3 +1,6 @@
+
+Since 0.2.3: see README
+
 0.2.3 :
 - Fixed the logarithmic base system so that it produces the expect results
 when using a different base than 2
