@@ -5,22 +5,28 @@ The [ARSS project page](http://arss.sourceforge.net/) says "ARSS is now supersed
 
 This repo is a fork of ARSS 0.2.3.
 
+
 ## Building
 
-<pre>cd src; cmake . &amp;&amp; make</pre>
+    cd src; cmake . &amp;&amp; make
+
 
 ## Examples
 
 ### (mono WAV) &rarr; (spectrogram as raw 32-bit float matrix columns)
-<pre>cat foo.wav | ./arss-fork STDIN STDOUT --min-freq 500 --max-freq 20000 --height 100 --pps 100 --analysis --float32-columns > foo.matrix</pre>
+
+    cat foo.wav | ./arss-fork STDIN STDOUT --min-freq 500 --max-freq 20000 --height 100 --pps 100 --analysis --float32-columns > foo.matrix
 
 You may want: [util_c/matrix2img](http://github.com/andrewschaaf/util_c)
+
 
 ## Changelog
 
 ### 0.3 : 2010-09-28
+
 * Support for reading from/to STDIN/STDOUT
 * Alternate output format: raw 32-bit float matrix columns.
+
 
 ## Notes
 
