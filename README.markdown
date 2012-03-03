@@ -8,7 +8,7 @@ This repo is a fork of ARSS 0.2.3.
 
 ## Building
 
-    cd src; cmake . &amp;&amp; make
+    cd src; cmake . && make
 
 
 ## Examples
